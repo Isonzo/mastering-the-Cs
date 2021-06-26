@@ -2,8 +2,8 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-int WIDTH = 15;
-int HEIGHT = 23;
+const int WIDTH = 15;
+const int HEIGHT = 23;
 
 char symbol = '@';
 
@@ -129,12 +129,29 @@ void spawnpiece()
 void physics(char dir)
 {
   int i;
-  int j;
+  int j, j_start, j_end;
   int change = 0;
+  int direction = 1;
+
+  switch (dir)
+  {
+    case 'a':
+      direction = 1;
+      j_end = 0;
+      j_start = WIDTH - 1;
+      break;
+
+    case 'd':
+      direction = -1;
+      j_end = WIDTH - 1;
+      j_start = 0;
+      break;
+  }
+
 
   for(i = HEIGHT - 1; i >=  0; --i)
   {
-    for(j = WIDTH - 1; j >= 0; --j)
+    for(j = j_start ; j == j_end; j += direction)
     { //If space directly below is not a space, don't move that piece
       if (screen[i][j] == symbol && screen[i + 1][j] == ' ')
       {
@@ -154,6 +171,9 @@ void physics(char dir)
         }
         // Mark down that physics DID happen
         change = 1;
+      }else if (screen[i][j] == symbol)
+      {
+        screen[i][j] = '%';
       }
     }
   }
