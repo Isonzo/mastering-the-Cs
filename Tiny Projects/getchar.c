@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-// copy input to output; 1st version
+// copy input to output; 2nd version
 int main()
 {
   int c;
