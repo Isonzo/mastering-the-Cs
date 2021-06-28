@@ -4,15 +4,15 @@
 
 int main()
 {
-  int c, nl;
+  int c, nl, tb, bl;
 
   nl = 0;
   while((c = getchar()) != EOF)
   {
-    if (c == '\n')
+    if (c == '\n' || c == ' ' || c == '\t')
     {
       ++nl;
     }
   }
-  printf("%d\n", nl);
+  printf("%d, %d, %d\n", nl, tb, bl);
 }
