@@ -43,7 +43,7 @@ void List_Print(List const* list)
 	{
 		printf("============\n");
 		printf("Node #%d\n", ++count);
-		printf("Data: %d", current->data); 
+		printf("Data: %d", current->data);
 		current = current->next;
 	}
 }
