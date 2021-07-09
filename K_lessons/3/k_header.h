@@ -15,12 +15,15 @@
 ////As always you can ask me for help on anything! <3
 
 #include <stdlib.h> //calloc
+#include <stdbool.h> //bool
+#include <stdio.h> //printf
 
-typedef struct
+typedef struct Node Node;
+struct Node
 {
-	Node* next;
-	int data;
-} Node;
+    Node* next;
+    int data;
+};
 
 typedef struct
 {
@@ -36,7 +39,7 @@ void List_Print(List const* list)
 {
 	//no list supplied
 	if(!list) return;
-	
+
 	Node* current = list->first;
 	int count = 0;
 	while(current)
