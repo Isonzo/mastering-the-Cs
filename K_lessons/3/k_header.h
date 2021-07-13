@@ -42,13 +42,13 @@ void List_Print(List const* list)
 
 	Node* current = list->first;
 	int count = 0;
-	while(current)
-	{
-		printf("============\n");
-		printf("Node #%d\n", ++count);
-		printf("Data: %d", current->data);
-		current = current->next;
-	}
+  while(current)
+  {
+    printf("============\n");
+    printf("Node #%d\n", ++count);
+    printf("Data: %d\n", current->data); //<---- added newline
+    current = current->next;
+  }
 }
 
 
