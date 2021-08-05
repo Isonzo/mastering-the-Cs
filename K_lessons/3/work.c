@@ -131,7 +131,10 @@ List* List_FromArray(int const* array, unsigned int arrayLength)
 	for(i = 0; i < arrayLength; ++i)
 	{
 		Node* temp;
-		temp->data = *(array)
+		temp = malloc(sizeof(Node));
+		if(!temp) return;
+		temp->data = *(array);
+
 		if(i == 0)
 			list->first = *(array)
 
