@@ -131,12 +131,19 @@ List* List_FromArray(int const* array, unsigned int arrayLength)
 	for(i = 0; i < arrayLength; ++i)
 	{
 		Node* temp;
+		Node* previous;
 		temp = malloc(sizeof(Node));
 		if(!temp) return;
-		temp->data = *(array);
+			temp->data = *(array + i);
 
 		if(i == 0)
-			list->first = *(array)
+			list->first = temp;
+			previous = temp;
+		else
+		{
+			previous->next = temp;
+			previous = temp;
+		}
 
 
 	}
