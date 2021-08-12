@@ -22,6 +22,7 @@ int main()
 	List_Print(test);
 
 	free(test); //Frees up head and tail
+	return 0;
 }
 
 //Pushes value into the front of the list
@@ -133,12 +134,14 @@ List* List_FromArray(int const* array, unsigned int arrayLength)
 		Node* temp;
 		Node* previous;
 		temp = malloc(sizeof(Node));
-		if(!temp) return;
+		if(!temp) return list;
 			temp->data = *(array + i);
 
 		if(i == 0)
+		{
 			list->first = temp;
 			previous = temp;
+		}
 		else
 		{
 			previous->next = temp;
