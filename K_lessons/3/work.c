@@ -128,18 +128,26 @@ void List_PushBack(List* list, int value)
 List* List_FromArray(int const* array, unsigned int arrayLength)
 {
 	List* list = List_Alloc();
-	int i;
-	for(i = 0; i < arrayLength; ++i)
+	Node* temp;
+	Node* previous;
+	for(int i = 0; i <= arrayLength; ++i)
 	{
-		Node* temp;
-		Node* previous;
-		temp = malloc(sizeof(Node));
-		if(!temp) return list;
+		if(i < arrayLength)
+		{
+			temp = malloc(sizeof(Node));
+			if(!temp) return NULL;
 			temp->data = *(array + i);
+		}
 
 		if(i == 0)
 		{
 			list->first = temp;
+			previous = temp;
+		}
+		else if(i == arrayLength)
+		{
+			list->last = temp;
+			previous->next = NULL;
 			previous = temp;
 		}
 		else
@@ -150,12 +158,25 @@ List* List_FromArray(int const* array, unsigned int arrayLength)
 
 
 	}
-	//Check if linked list is the same length. If it isn't, proccess has failed
-	// if (List_Count(list) != arrayLength) return NULL;
+	// Check if linked list is the same length. If it isn't, proccess has failed
+	if (List_Count(list) != arrayLength) return NULL;
 	return list;
 }
 
 //Insert value at a certain index, assuming linked list is 0-indexed
 void List_Insert(List* list, int value, unsigned int index)
 {
+	Node* new_node;
+	Node* temp;
+	new_node = malloc(sizeof(Node));
+	if (!new_node) return;
+	new_node->data = value;
+	temp = list->first;
+
+	for (int count = 0; count <= index; ++count)
+	{
+
+	}
+
+
 }
