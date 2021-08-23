@@ -132,6 +132,7 @@ List* List_FromArray(int const* array, unsigned int arrayLength)
 	Node* previous;
 	for(int i = 0; i <= arrayLength; ++i)
 	{
+		// This avoids an unneccesary malloc at the end
 		if(i < arrayLength)
 		{
 			temp = malloc(sizeof(Node));
@@ -163,20 +164,40 @@ List* List_FromArray(int const* array, unsigned int arrayLength)
 	return list;
 }
 
-//Insert value at a certain index, assuming linked list is 0-indexed
+//Insert value at a certain index, assuming linked list is 0-indexed and has at least one value
 void List_Insert(List* list, int value, unsigned int index)
 {
-	Node* new_node;
-	Node* temp;
-	new_node = malloc(sizeof(Node));
+	Node* new_node = malloc(sizeof(Node));
 	if (!new_node) return;
 	new_node->data = value;
-	temp = list->first;
 
-	for (int count = 0; count <= index; ++count)
+	// If the index is bigger than the list, abort
+	if (index > List_Count(list))
+		return;
+
+	// If the node is at the beginning or end, let's just save ourselves the hassle
+	if(index == 0)
 	{
-
+		new_node->next = list->first;
+		list->first = new_node;
+		return;
 	}
-
-
+	else if(index == List_Count(list))
+	{
+		list->last->next = new_node;
+		new_node->next = NULL;
+		list->last = new_node;
+		return;
+	}
+	// Since it's not the first or last, we make some variables to help us keep track and iterate through the list to insert
+	Node* previous;
+	Node* temp = list->first;
+	for (int count = 0; count < index; ++count)
+	{
+		previous = temp;
+		temp = temp->next;
+	}
+	previous->next = new_node;
+	new_node->next = temp;
+	return;
 }
