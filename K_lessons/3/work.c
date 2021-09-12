@@ -10,6 +10,8 @@ int main()
 	List** ptr_to_test = &test;
 	int array[5] = {1, 2, 3, 4, 5};
 	int* ptr = array;
+	List* new_test;
+	List** ptr_to_new = &new_test;
 
 	// test = List_Alloc();
 	// while (number != 0) //make a test list
@@ -21,8 +23,12 @@ int main()
 
 	test = List_FromArray(ptr, 5);
 	List_Reverse(test);
+	new_test = List_Copy(test);
+	List_Print(new_test);
+	printf("\n");
 	List_Print(test);
 	List_Free(ptr_to_test);
+	List_Free(ptr_to_new);
 	return 0;
 }
 
@@ -331,5 +337,20 @@ void List_Reverse(List* list)
 	list->first = prev;
 }
 
-//Create a new list with the same contents in the same order as the input list and return it.
-List* List_Copy(List* list);
+//Create a new list with the same contents in the same order as the input list and return it. Returns NULL if fails.
+List* List_Copy(List* list)
+{
+	if (!list) return NULL;
+	List* new_list;
+	new_list = List_Alloc();
+	if (!new_list) return NULL;
+	Node* temp = list->first;
+	// I'm gonna go ahead and and assume that I can't simply point to the original list's nodes
+	while (temp != NULL)
+	{
+		List_PushBack(new_list, temp->data);
+		temp = temp->next;
+	}
+	return new_list;
+
+}
