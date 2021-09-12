@@ -348,8 +348,14 @@ List* List_Copy(List* list)
 	// I'm gonna go ahead and and assume that I can't simply point to the original list's nodes
 	while (temp != NULL)
 	{
+		Node* prev_last = new_list->last;
 		List_PushBack(new_list, temp->data);
 		temp = temp->next;
+		if (prev_last == list->last)
+		{
+			List_Free(new_list);
+			return NULL;
+		}
 	}
 	return new_list;
 }
@@ -362,7 +368,10 @@ List* List_Copy(List* list)
 
 ////Pointer practice
 //Swap the position of the nodes located at the two indices in the given list.
-void List_SwapNodes(List* list, unsigned int firstIndex, unsigned int secondIndex);
+void List_SwapNodes(List* list, unsigned int firstIndex, unsigned int secondIndex)
+{
+
+}
 
 ////C++ practice
 //Run the specified function for every node in the list.
