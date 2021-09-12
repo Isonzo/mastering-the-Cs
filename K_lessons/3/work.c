@@ -7,6 +7,7 @@ unsigned int List_Count(List const* list);
 int main()
 {
 	List* test;
+	List** ptr_to_test = &test;
 	int array[5] = {1, 2, 3, 4, 5};
 	int* ptr = array;
 
@@ -19,9 +20,9 @@ int main()
 	// }
 
 	test = List_FromArray(ptr, 5);
+	List_Reverse(test);
 	List_Print(test);
-
-	free(test); //Frees up head and tail
+	List_Free(ptr_to_test);
 	return 0;
 }
 
@@ -201,3 +202,134 @@ void List_Insert(List* list, int value, unsigned int index)
 	new_node->next = temp;
 	return;
 }
+
+//Insert a new item into the list. Assume the list is already sorted.
+//Obviously, it should remain sorted after the insertion.
+void List_SortedInsert(List* list, int value)
+{
+	Node* new_node = malloc(sizeof(Node));
+	if (!new_node) return;
+	new_node->data = value;
+	// Check if it should be first
+	if (list->first->data >= value)
+	{
+		new_node->next = list->first;
+		list->first = new_node;
+		return;
+	}
+	// Check if it is last, to skip everything and avoid pointer issues
+	if (list->last->data <= value)
+	{
+		list->last->next = new_node;
+		list->last = new_node;
+		return;
+	}
+	Node* temp = list->first;
+	Node* prev = temp;
+	for (int count = 0; count < List_Count(list); ++count)
+	{
+		if (temp->data >= value)
+			break;
+		else
+		{
+			prev = temp;
+			temp = temp->next;
+		}
+	}
+	prev->next = new_node;
+	new_node->next = temp;
+}
+
+//Returns true if the list has no duplicate elements (i.e. all elements are unique).
+bool List_IsUnique(List const* list)
+{
+	if (!list)
+		return true;  // If it has no elements, they can't be duplicate, right?
+	int list_count = List_Count(list);
+	int values_present[list_count];
+	Node* temp = list->first;
+	int count = 0;
+
+	for(int count = 0; count < list_count; ++count)
+	{
+		values_present[count] = temp->data;
+		for (int i = 0; i < count; ++i)
+		{
+			if (values_present[i] == temp->data)
+				return false;
+		}
+		temp = temp->next;
+	}
+	return true;
+}
+
+//Remove the first node in the list that has the specified value. If such a node does not exist, do nothing.
+void List_Remove(List* list, int value)
+{
+	if (!list) return;
+	Node* temp = list->first;
+	Node* prev;
+	if (list->first->data == value)
+	{
+		list->first = list->first->next;
+		free(temp);
+		return;
+	}
+	while(temp != list->last) // We want alternate behavior if we reach the end.
+	{
+		if (temp->data == value) // Found the number on death row.
+		{
+			// Connect previous and node that comes after temp, then eliminate temp.
+			prev->next = temp->next;
+			free(temp);
+			return;
+		}
+		prev = temp;
+		temp = temp->next;
+		printf("prev: %d, temp: %d\n",prev->data, temp->data);
+	}
+	if (temp->data == value) // Double-checking.
+	{
+		prev->next = NULL;
+		list->last = prev;
+		free(temp);
+	}
+	return;
+}
+
+//Free the list and its contents from memory, then set the pointer to it to NULL.
+void List_Free(List** list)
+{
+	Node* node_to_die;
+	Node* temp = (*list)->first;
+	while (temp != NULL)
+	{
+		node_to_die = temp;
+		temp = temp->next;
+		free(node_to_die);
+	}
+	free(*list);
+	*list = NULL;
+	list = NULL;
+}
+
+//Reverse the order of nodes in the list
+void List_Reverse(List* list)
+{
+	Node* prev = NULL;
+	Node* current = list->first;
+	Node* next = NULL;
+
+	while (current != NULL)
+	{
+		next = current->next;
+		current->next = prev;
+		prev = current;
+		current = next;
+	}
+	list->last = list->first;
+	list->first = prev;
+}
+
+//Create a new list with the same contents in the same order as the input list and return it.
+List* List_Copy(List* list);
