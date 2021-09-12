@@ -352,5 +352,77 @@ List* List_Copy(List* list)
 		temp = temp->next;
 	}
 	return new_list;
-
 }
+
+/////////////////////////
+/////////////////////////
+////////EXTRA CREDIT/////
+/////////////////////////
+/////////////////////////
+
+////Pointer practice
+//Swap the position of the nodes located at the two indices in the given list.
+void List_SwapNodes(List* list, unsigned int firstIndex, unsigned int secondIndex);
+
+////C++ practice
+//Run the specified function for every node in the list.
+void List_ForEach(List const* list, void(*fn)(Node const*));
+
+////C++ practice
+//Same as above but non-const. Do NOT try to reuse code between these two functions.
+void List_Transform(List* list, void(*fn)(Node*));
+
+////C++ practice
+//Replace the contents of list1 with the contents of list2, and vice versa.
+void List_Swap(List* list1, List* list2);
+
+////C++ practice
+//Clear the list stored at newList, and move the contents of oldList there.
+//The fate of oldList is irrelevant. You may leave it in a garbage state if you wish.
+////Hint: There's a very bad and slow way to do this, and a very nice and fast way.
+////Hint 2: Don't forget the user might surprise you with their inputs...
+void List_Move(List* oldList, List* newList);
+
+////Pointer and general data structure practice
+//Remove all duplicate items in the list, if any. Leave the first occurrence in the list.
+void List_RemoveDuplicates(List* list);
+
+////Pointer practice
+//Sort the contents of the list. It should contain the same notes, but in ascending order.
+////I'm not concerned with the efficiency of the sort itself, but I do care about the efficiency that nodes are moved with.
+////I recommend implementing a selection sort for this.
+////DO NOT try to use your List_SwapNodes function!!
+void List_Sort(List* list);
+
+////Pointer practice
+//Copy all the nodes from the "extra" list to the destination list.
+//You may assume the destination list is already sorted.
+//The destination list should remain sorted afterwards.
+void List_Blend(List* destination, List const* extra);
+
+//Same as List_Blend, except the nodes from the extra list should be moved and not copied.
+//The extra list should have no nodes on it afterward.
+void List_Merge(List* destination, List* extra);
+
+////C++ practice
+//Return the difference between the two lists.
+//The return value for this should mimic the same pattern as strcmp() from the standard C library.
+//For example, if the lists are identical you should return zero.
+//If either list is null, return INT_MAX.
+int List_Compare(List const* list1, List const* list2);
+
+
+////These two are probably the hardest functions in this exercise. I think that they'd be standard material for a second-year CS student at a decent uni. Have fun!
+
+////C++ and pointer practice
+//Splice the contents of source onto destination. What this means is do the following:
+//Remove all nodes from sourceIndexStart to sourceIndexEnd on source,
+//and then insert them in the same order at destIndex on destination.
+//If sourceIndexEnd < sourceIndexStart, insert them in destination in reverse order.
+void List_Splice(List* destination, unsigned int destIndex, List* source, unsigned int sourceIndexStart, unsigned int sourceIndexEnd);
+
+////C++ and pointer practice
+//Takes a pointer to a function that takes a Node const* as an argument, and returns true(nonzero) or false(zero).
+//This function will then remove all nodes from the given list where the predicate returned false.
+//It should return the number of nodes that were removed.
+unsigned int List_RemoveIf(List* list, int(*predicate)(Node const*));
