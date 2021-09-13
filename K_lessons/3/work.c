@@ -15,7 +15,7 @@ int main()
 	List* test2;
 	List** ptr_to_test = &test;
 	List** ptr_to_test2 = &test2;
-	int array[5] = {1, 2, 3, 4, 5};
+	int array[5] = {5, 4, 3, 2, 1};
 	int* ptr = array;
 	List* new_test;
 	List** ptr_to_new = &new_test;
@@ -32,7 +32,7 @@ int main()
 	// }
 
 	test = List_FromArray(ptr, 5);
-	List_PushBack(test, 4);
+	List_Sort(test);
 
 	List_Print(test);
 	List_Free(ptr_to_test);
@@ -528,7 +528,47 @@ void List_RemoveDuplicates(List* list)
 ////I'm not concerned with the efficiency of the sort itself, but I do care about the efficiency that nodes are moved with.
 ////I recommend implementing a selection sort for this.
 ////DO NOT try to use your List_SwapNodes function!!
-void List_Sort(List* list);
+void List_Sort(List* list)
+{
+	if (!list) return;
+	Node* starting_point = list->first;
+	Node* min_node;
+	Node* list_builder;
+	Node* first;
+	Node* last;
+	int list_count = List_Count(list);
+
+	for (int i = 0; i < list_count; ++i)
+	{
+		Node* temp = starting_point;
+		min_node = temp;
+		temp = temp->next;
+		while (temp != NULL)
+		{
+			if (min_node->data < temp->data)
+				min_node = temp;
+			temp = temp->next;
+		}
+		printf("%d", min_node->data);
+		if (i == 0)
+		{
+			list->first = min_node;
+			list_builder = list->first;
+		}
+		else if (i == list_count-1)
+		{
+			list->last == min_node;
+			list_builder->next = min_node;
+		}
+		else
+		{
+			list_builder->next = min_node;
+			list_builder = min_node;
+		}
+		starting_point = starting_point->next;
+	}
+	return;
+}
 
 ////Pointer practice
 //Copy all the nodes from the "extra" list to the destination list.
