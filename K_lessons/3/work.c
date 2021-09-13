@@ -33,7 +33,7 @@ int main()
 
 	test = List_FromArray(ptr, 5);
 	List_PushBack(test, 4);
-	
+
 	List_Print(test);
 	List_Free(ptr_to_test);
 	return 0;
@@ -478,6 +478,7 @@ void List_Swap(List* list1, List* list2)
 ////Hint 2: Don't forget the user might surprise you with their inputs...
 void List_Move(List* oldList, List* newList)
 {
+	if (!oldList || !newList) return;
 	List_Swap(oldList, newList);
 	List_Free(&oldList);
 }
