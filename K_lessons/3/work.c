@@ -461,6 +461,7 @@ void List_Transform(List* list, void(*fn)(Node*))
 //Replace the contents of list1 with the contents of list2, and vice versa.
 void List_Swap(List* list1, List* list2)
 {
+	if (!list1 || !list2) return;
 	Node* temp_first = list1->first;
 	Node* temp_last = list1->last;
 
