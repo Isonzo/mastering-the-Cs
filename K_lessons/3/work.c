@@ -22,13 +22,10 @@ int main()
 	// }
 
 	test = List_FromArray(ptr, 5);
-	List_Reverse(test);
-	new_test = List_Copy(test);
-	List_Print(new_test);
+	List_SwapNodes(test, 2, 4);
 	printf("\n");
 	List_Print(test);
 	List_Free(ptr_to_test);
-	List_Free(ptr_to_new);
 	return 0;
 }
 
@@ -342,6 +339,7 @@ List* List_Copy(List* list)
 {
 	if (!list) return NULL;
 	List* new_list;
+	List** ptr_to_new;
 	new_list = List_Alloc();
 	if (!new_list) return NULL;
 	Node* temp = list->first;
@@ -353,7 +351,7 @@ List* List_Copy(List* list)
 		temp = temp->next;
 		if (prev_last == list->last)
 		{
-			List_Free(new_list);
+			List_Free(ptr_to_new);
 			return NULL;
 		}
 	}
@@ -370,7 +368,54 @@ List* List_Copy(List* list)
 //Swap the position of the nodes located at the two indices in the given list.
 void List_SwapNodes(List* list, unsigned int firstIndex, unsigned int secondIndex)
 {
+	if (!list) return;
+	Node* first_node = NULL;
+	Node* second_node = NULL;
+	Node* prev_first = NULL;
+	Node* prev_second = NULL;
+	Node* future_first = NULL;
+	Node* future_second = NULL;
+	Node* temp = list->first;
+	int count = 0;
 
+	if (firstIndex == secondIndex) return;
+	if (firstIndex >= List_Count(list) || secondIndex >= List_Count(list)) return;
+
+	// Get first_node and second_node, as well as surrounding nodes.
+	while (temp != NULL || (first_node == NULL) && (second_node == NULL))
+	{
+		if (count == firstIndex - 1)
+		{
+			future_first = temp->next->next;
+			first_node = temp->next;
+			prev_first = temp;
+		}
+		else if (count == secondIndex - 1)
+		{
+			future_second = temp->next->next;
+			second_node = temp->next;
+			prev_second = temp;
+		}
+
+		temp = temp->next;
+		++count;
+	}
+	// Time for the switcheroo
+	prev_first->next = second_node;
+	second_node->next = future_first;
+	prev_second->next = first_node;
+	first_node->next = future_second;
+
+	// Fix up first and last pointers, assuming something happened to them
+	if (first_node == list->last)
+		list->last = second_node;
+	else if (first_node == list->first)
+		list->first = second_node;
+	else if (second_node == list->last)
+		list->last = first_node;
+	else if (second_node == list->first)
+		list->first = first_node:
+	return;
 }
 
 ////C++ practice
