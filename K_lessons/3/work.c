@@ -12,7 +12,9 @@ void Test_Function(Node* node)
 int main()
 {
 	List* test;
+	List* test2;
 	List** ptr_to_test = &test;
+	List** ptr_to_test2 = &test2;
 	int array[5] = {1, 2, 3, 4, 5};
 	int* ptr = array;
 	List* new_test;
@@ -30,7 +32,8 @@ int main()
 	// }
 
 	test = List_FromArray(ptr, 5);
-	List_Transform(test, function_ptr);
+	List_PushBack(test, 4);
+	
 	List_Print(test);
 	List_Free(ptr_to_test);
 	return 0;
@@ -475,12 +478,48 @@ void List_Swap(List* list1, List* list2)
 ////Hint 2: Don't forget the user might surprise you with their inputs...
 void List_Move(List* oldList, List* newList)
 {
-
+	List_Swap(oldList, newList);
+	List_Free(&oldList);
 }
 
 ////Pointer and general data structure practice
 //Remove all duplicate items in the list, if any. Leave the first occurrence in the list.
-void List_RemoveDuplicates(List* list);
+void List_RemoveDuplicates(List* list)
+{
+	if (!list) return;
+	if (List_IsUnique(list)) return;
+	// Initialize an array
+	int list_count = List_Count(list);
+	int data_seen[list_count];
+	int array_count = 0;
+	for (int i = 0; i < list_count; ++i)
+		data_seen[i] = INT_MIN;
+
+	Node* temp = list->first;
+	Node* prev;
+	while (temp != NULL)
+	{
+		// Check if current node is in data_seen.
+		for (int i = 0; i < list_count; ++i)
+		{
+			if(data_seen[i]== INT_MIN)
+			{
+				data_seen[array_count++] = temp->data;
+				prev = temp;
+				temp = temp->next;
+				break;
+			}
+			else if (temp->data == data_seen[i])
+			{
+				prev->next = temp->next;
+				free(temp);
+				temp = prev->next;
+				break;
+			}
+		}
+	}
+	return;
+}
 
 ////Pointer practice
 //Sort the contents of the list. It should contain the same notes, but in ascending order.
