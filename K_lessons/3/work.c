@@ -4,6 +4,11 @@
 void List_PushFront(List* list, int value);
 unsigned int List_Count(List const* list);
 
+void Test_Function(Node* node)
+{
+	++(node->data);
+}
+
 int main()
 {
 	List* test;
@@ -12,6 +17,9 @@ int main()
 	int* ptr = array;
 	List* new_test;
 	List** ptr_to_new = &new_test;
+
+	void (*function_ptr)(Node*);
+	function_ptr = &Test_Function;
 
 	// test = List_Alloc();
 	// while (number != 0) //make a test list
@@ -22,8 +30,7 @@ int main()
 	// }
 
 	test = List_FromArray(ptr, 5);
-	List_SwapNodes(test, 2, 4);
-	printf("\n");
+	List_Transform(test, function_ptr);
 	List_Print(test);
 	List_Free(ptr_to_test);
 	return 0;
@@ -414,28 +421,62 @@ void List_SwapNodes(List* list, unsigned int firstIndex, unsigned int secondInde
 	else if (second_node == list->last)
 		list->last = first_node;
 	else if (second_node == list->first)
-		list->first = first_node:
+		list->first = first_node;
 	return;
 }
 
 ////C++ practice
 //Run the specified function for every node in the list.
-void List_ForEach(List const* list, void(*fn)(Node const*));
+void List_ForEach(List const* list, void(*fn)(Node const*))
+{
+	if (!list) return;
+	Node* temp = list->first;
+
+	while (temp != NULL)
+	{
+		fn(temp);
+		temp = temp->next;
+	}
+}
 
 ////C++ practice
 //Same as above but non-const. Do NOT try to reuse code between these two functions.
-void List_Transform(List* list, void(*fn)(Node*));
+// Using the same code works in my test case ;_;
+void List_Transform(List* list, void(*fn)(Node*))
+{
+	if (!list) return;
+	Node* temp = list->first;
+
+	while (temp != NULL)
+	{
+		fn(temp);
+		temp = temp->next;
+	}
+}
 
 ////C++ practice
 //Replace the contents of list1 with the contents of list2, and vice versa.
-void List_Swap(List* list1, List* list2);
+void List_Swap(List* list1, List* list2)
+{
+	Node* temp_first = list1->first;
+	Node* temp_last = list1->last;
+
+	list1->first = list2->first;
+	list1->last = list2->last;
+
+	list2->first = temp_first;
+	list2->last = temp_last;
+}
 
 ////C++ practice
 //Clear the list stored at newList, and move the contents of oldList there.
 //The fate of oldList is irrelevant. You may leave it in a garbage state if you wish.
 ////Hint: There's a very bad and slow way to do this, and a very nice and fast way.
 ////Hint 2: Don't forget the user might surprise you with their inputs...
-void List_Move(List* oldList, List* newList);
+void List_Move(List* oldList, List* newList)
+{
+
+}
 
 ////Pointer and general data structure practice
 //Remove all duplicate items in the list, if any. Leave the first occurrence in the list.
