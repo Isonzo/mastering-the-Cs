@@ -15,7 +15,7 @@ int main()
 	List* test2;
 	List** ptr_to_test = &test;
 	List** ptr_to_test2 = &test2;
-	int array[5] = {5, 4, 3, 2, 1};
+	int array[5] = {4, 5, 3, 1, 2};
 	int* ptr = array;
 	List* new_test;
 	List** ptr_to_new = &new_test;
@@ -33,6 +33,7 @@ int main()
 
 	test = List_FromArray(ptr, 5);
 	List_Sort(test);
+	List_SwapNodes(test,0 , 4);
 
 	List_Print(test);
 	List_Free(ptr_to_test);
@@ -379,53 +380,73 @@ List* List_Copy(List* list)
 void List_SwapNodes(List* list, unsigned int firstIndex, unsigned int secondIndex)
 {
 	if (!list) return;
-	Node* first_node = NULL;
-	Node* second_node = NULL;
-	Node* prev_first = NULL;
-	Node* prev_second = NULL;
-	Node* future_first = NULL;
-	Node* future_second = NULL;
-	Node* temp = list->first;
-	int count = 0;
-
 	if (firstIndex == secondIndex) return;
 	if (firstIndex >= List_Count(list) || secondIndex >= List_Count(list)) return;
-
-	// Get first_node and second_node, as well as surrounding nodes.
-	while (temp != NULL || (first_node == NULL) && (second_node == NULL))
+	Node* temp = list->first;
+	Node* first;
+	Node* second;
+	int count = 0;
+	while (temp != NULL || (first == NULL && first == NULL))
 	{
-		if (count == firstIndex - 1)
-		{
-			future_first = temp->next->next;
-			first_node = temp->next;
-			prev_first = temp;
-		}
-		else if (count == secondIndex - 1)
-		{
-			future_second = temp->next->next;
-			second_node = temp->next;
-			prev_second = temp;
-		}
-
+		if (count == firstIndex)
+			first = temp;
+		else if (count == secondIndex)
+			second = temp;
 		temp = temp->next;
 		++count;
 	}
-	// Time for the switcheroo
-	prev_first->next = second_node;
-	second_node->next = future_first;
-	prev_second->next = first_node;
-	first_node->next = future_second;
-
-	// Fix up first and last pointers, assuming something happened to them
-	if (first_node == list->last)
-		list->last = second_node;
-	else if (first_node == list->first)
-		list->first = second_node;
-	else if (second_node == list->last)
-		list->last = first_node;
-	else if (second_node == list->first)
-		list->first = first_node;
+	// Commence the new and improved swap.
+	int temp_data = first->data;
+	first->data = second->data;
+	second->data = temp_data;
 	return;
+	// Node* first_node = NULL;
+	// Node* second_node = NULL;
+	// Node* prev_first = NULL;
+	// Node* prev_second = NULL;
+	// Node* future_first = NULL;
+	// Node* future_second = NULL;
+	// Node* temp = list->first;
+	// int count = 0;
+	//
+	// if (firstIndex == secondIndex) return;
+	// if (firstIndex >= List_Count(list) || secondIndex >= List_Count(list)) return;
+	//
+	// // Get first_node and second_node, as well as surrounding nodes.
+	// while (temp != NULL || (first_node == NULL) && (second_node == NULL))
+	// {
+	// 	if (count == firstIndex - 1)
+	// 	{
+	// 		future_first = temp->next->next;
+	// 		first_node = temp->next;
+	// 		prev_first = temp;
+	// 	}
+	// 	else if (count == secondIndex - 1)
+	// 	{
+	// 		future_second = temp->next->next;
+	// 		second_node = temp->next;
+	// 		prev_second = temp;
+	// 	}
+	//
+	// 	temp = temp->next;
+	// 	++count;
+	// }
+	// // Time for the switcheroo
+	// prev_first->next = second_node;
+	// second_node->next = future_first;
+	// prev_second->next = first_node;
+	// first_node->next = future_second;
+	//
+	// // Fix up first and last pointers, assuming something happened to them
+	// if (first_node == list->last)
+	// 	list->last = second_node;
+	// else if (first_node == list->first)
+	// 	list->first = second_node;
+	// else if (second_node == list->last)
+	// 	list->last = first_node;
+	// else if (second_node == list->first)
+	// 	list->first = first_node;
+	// return;
 }
 
 ////C++ practice
@@ -533,39 +554,25 @@ void List_Sort(List* list)
 	if (!list) return;
 	Node* starting_point = list->first;
 	Node* min_node;
-	Node* list_builder;
-	Node* first;
-	Node* last;
 	int list_count = List_Count(list);
 
-	for (int i = 0; i < list_count; ++i)
+	while (starting_point != NULL)
 	{
 		Node* temp = starting_point;
 		min_node = temp;
 		temp = temp->next;
 		while (temp != NULL)
 		{
-			if (min_node->data < temp->data)
+			if (min_node->data > temp->data)
 				min_node = temp;
 			temp = temp->next;
 		}
-		printf("%d", min_node->data);
-		if (i == 0)
-		{
-			list->first = min_node;
-			list_builder = list->first;
-		}
-		else if (i == list_count-1)
-		{
-			list->last == min_node;
-			list_builder->next = min_node;
-		}
-		else
-		{
-			list_builder->next = min_node;
-			list_builder = min_node;
-		}
+		Node * swap_node = starting_point;
 		starting_point = starting_point->next;
+		// Swappin' time
+		int temp_data = swap_node->data;
+		swap_node->data = min_node->data;
+		min_node->data = temp_data;
 	}
 	return;
 }
