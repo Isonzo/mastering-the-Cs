@@ -16,14 +16,17 @@ int main()
 	List** ptr_to_test = &test;
 	List** ptr_to_test2 = &test2;
 	int array[5] = {4, 5, 3, 1, 2};
+	int array2[4] = {0, 2, 4, 6};
 	int* ptr = array;
+	int* ptr2 = array2;
 	List* new_test;
 	List** ptr_to_new = &new_test;
+	int number = 1;
 
 	void (*function_ptr)(Node*);
 	function_ptr = &Test_Function;
 
-	// test = List_Alloc();
+	// test2 = List_Alloc();
 	// while (number != 0) //make a test list
 	// {
 	// 	printf("Input your number (or 0 to break): ");
@@ -32,11 +35,13 @@ int main()
 	// }
 
 	test = List_FromArray(ptr, 5);
+	test2 = List_FromArray(ptr2, 4);
 	List_Sort(test);
-	List_SwapNodes(test,0 , 4);
+	List_Blend(test, test2);
 
 	List_Print(test);
 	List_Free(ptr_to_test);
+	List_Free(ptr_to_test2);
 	return 0;
 }
 
@@ -581,7 +586,45 @@ void List_Sort(List* list)
 //Copy all the nodes from the "extra" list to the destination list.
 //You may assume the destination list is already sorted.
 //The destination list should remain sorted afterwards.
-void List_Blend(List* destination, List const* extra);
+void List_Blend(List* destination, List const* extra)
+{
+	Node* temp_extra = extra->first;
+	while (temp_extra != NULL)
+	{
+		Node* temp = destination->first->next;
+		Node* prev = destination->first;
+		// This is to save time if the node is lower than the minimum or greater than the maximum.
+		if (temp_extra->data <= destination->first->data)
+		{
+			List_PushFront(destination, temp_extra->data);
+			temp_extra = temp_extra->next;
+			continue;
+		}
+		else if (temp_extra->data >= destination->last->data)
+		{
+			List_PushBack(destination, temp_extra->data);
+			temp_extra = temp_extra->next;
+			continue;
+		}
+		while (temp != NULL)
+		{
+			if (temp->data >= temp_extra->data)
+			{
+				Node* new_node;
+				new_node = malloc(sizeof(Node));
+				if (!new_node) return;
+				new_node->next = prev->next;
+				prev->next = new_node;
+				new_node->data = temp_extra->data;
+				break;
+			}
+			prev = temp;
+			temp = temp->next;
+		}
+		temp_extra = temp_extra->next;
+	}
+	return;
+}
 
 //Same as List_Blend, except the nodes from the extra list should be moved and not copied.
 //The extra list should have no nodes on it afterward.
