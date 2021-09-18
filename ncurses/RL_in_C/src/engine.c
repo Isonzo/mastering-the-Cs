@@ -11,7 +11,7 @@ void gameLoop(void)
 {
     int ch;
 
-    mvaddch(player->pos.y, player->pos.x, player->ch);
+    drawEverything();
 
     while (ch = getch())
     {
@@ -21,8 +21,7 @@ void gameLoop(void)
         }
 
         handleInput(ch);
-        clear();
-        mvaddch(player->pos.y, player->pos.x, player->ch);
+        drawEverything();
     }
 }
 
