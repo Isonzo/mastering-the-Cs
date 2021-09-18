@@ -11,37 +11,11 @@ void Test_Function(Node* node)
 
 int main()
 {
-	List* test;
-	List* test2;
-	List** ptr_to_test = &test;
-	List** ptr_to_test2 = &test2;
-	int array[5] = {4, 5, 3, 1, 2};
-	int array2[4] = {0, 2, 4, 6};
-	int* ptr = array;
-	int* ptr2 = array2;
-	List* new_test;
-	List** ptr_to_new = &new_test;
-	int number = 1;
+	List* list1 = List_Alloc();
+	List* leaky_list = List_Alloc();
+	List_PushBack(leaky_list, 1);
 
-	void (*function_ptr)(Node*);
-	function_ptr = &Test_Function;
-
-	// test2 = List_Alloc();
-	// while (number != 0) //make a test list
-	// {
-	// 	printf("Input your number (or 0 to break): ");
-	// 	scanf("%d", &number);
-	// 	List_PushBack(test, number);
-	// }
-
-	test = List_FromArray(ptr, 5);
-	test2 = List_FromArray(ptr2, 4);
-	List_Sort(test);
-	List_Blend(test, test2);
-
-	List_Print(test);
-	List_Free(ptr_to_test);
-	List_Free(ptr_to_test2);
+	List_Move(list1, leaky_list);
 	return 0;
 }
 
@@ -58,6 +32,7 @@ void List_PushFront(List* list, int value)
 	{
 		list->first = new_node;
 		list->last = new_node;
+		new_node->next = NULL;
 		return;
 	}
 	new_node->next = list->first;
@@ -135,6 +110,7 @@ void List_PushBack(List* list, int value)
 	{
 		list->first = new_node;
 		list->last = new_node;
+		new_node->next = NULL;
 	}
 	else
 	{
@@ -156,7 +132,11 @@ List* List_FromArray(int const* array, unsigned int arrayLength)
 		if(i < arrayLength)
 		{
 			temp = malloc(sizeof(Node));
-			if(!temp) return NULL;
+			if(!temp)
+			{
+				List_Free(&list);
+				return NULL;
+			}
 			temp->data = *(array + i);
 		}
 
@@ -226,26 +206,25 @@ void List_Insert(List* list, int value, unsigned int index)
 //Obviously, it should remain sorted after the insertion.
 void List_SortedInsert(List* list, int value)
 {
-	Node* new_node = malloc(sizeof(Node));
-	if (!new_node) return;
-	new_node->data = value;
 	// Check if it should be first
 	if (list->first->data >= value)
 	{
-		new_node->next = list->first;
-		list->first = new_node;
+		List_PushFront(list, value);
 		return;
 	}
 	// Check if it is last, to skip everything and avoid pointer issues
 	if (list->last->data <= value)
 	{
-		list->last->next = new_node;
-		list->last = new_node;
+		List_PushBack(list, value);
 		return;
 	}
 	Node* temp = list->first;
 	Node* prev = temp;
-	for (int count = 0; count < List_Count(list); ++count)
+	Node* new_node;
+	new_node = malloc(sizeof(Node));
+	if (new_node) return;
+	new_node->data = value;
+	while (temp != NULL)
 	{
 		if (temp->data >= value)
 			break;
@@ -265,11 +244,11 @@ bool List_IsUnique(List const* list)
 	if (!list)
 		return true;  // If it has no elements, they can't be duplicate, right?
 	int list_count = List_Count(list);
-	int values_present[list_count];
+	int* values_present = malloc(list_count * sizeof(int));
 	Node* temp = list->first;
 	int count = 0;
 
-	for(int count = 0; count < list_count; ++count)
+	while (temp != NULL)
 	{
 		values_present[count] = temp->data;
 		for (int i = 0; i < count; ++i)
@@ -319,6 +298,7 @@ void List_Remove(List* list, int value)
 //Free the list and its contents from memory, then set the pointer to it to NULL.
 void List_Free(List** list)
 {
+	if (!list) return;
 	Node* node_to_die;
 	Node* temp = (*list)->first;
 	while (temp != NULL)
@@ -335,6 +315,7 @@ void List_Free(List** list)
 //Reverse the order of nodes in the list
 void List_Reverse(List* list)
 {
+	if (!list) return;
 	Node* prev = NULL;
 	Node* current = list->first;
 	Node* next = NULL;
@@ -391,7 +372,7 @@ void List_SwapNodes(List* list, unsigned int firstIndex, unsigned int secondInde
 	Node* first;
 	Node* second;
 	int count = 0;
-	while (temp != NULL || (first == NULL && first == NULL))
+	while (temp != NULL || (first == NULL && second == NULL))
 	{
 		if (count == firstIndex)
 			first = temp;
@@ -506,6 +487,7 @@ void List_Swap(List* list1, List* list2)
 void List_Move(List* oldList, List* newList)
 {
 	if (!oldList || !newList) return;
+	if (oldList == newList) return;
 	List_Swap(oldList, newList);
 	List_Free(&oldList);
 }
