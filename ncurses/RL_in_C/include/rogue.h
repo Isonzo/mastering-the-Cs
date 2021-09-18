@@ -20,6 +20,11 @@ typedef struct
     char ch;
 }Entity;
 
+//engine.c functions
+void cursesSetup(void);
+void gameLoop(void);
+void closeGame(void);
+
 
 // player.c functions
 Entity* createPlayer(Position start_pos);
