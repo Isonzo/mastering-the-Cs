@@ -23,6 +23,15 @@ typedef struct
 
 typedef struct
 {
+    int height;
+    int width;
+    Position pos;
+    Position center;
+} Room;
+
+
+typedef struct
+{
     Position pos;
     char ch;
 }Entity;
@@ -46,6 +55,10 @@ void freeMap(void);
 Entity* createPlayer(Position start_pos);
 void handleInput(int input);
 void movePlayer(Position newPos);
+
+// room.c functions
+Room createRoom(int y, int x, int height, int width);
+void addRoomToMap(Room room);
 
 // externs
 extern const int MAP_HEIGHT;
