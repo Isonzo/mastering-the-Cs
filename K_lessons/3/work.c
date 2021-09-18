@@ -497,7 +497,6 @@ void List_Move(List* oldList, List* newList)
 void List_RemoveDuplicates(List* list)
 {
 	if (!list) return;
-	if (List_IsUnique(list)) return;
 	// Initialize an array
 	int list_count = List_Count(list);
 	int data_seen[list_count];
