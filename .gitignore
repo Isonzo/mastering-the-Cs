@@ -1,0 +1,5 @@
+*.vscode
+*.vs
+a.out
+make.bat
+*.exe
