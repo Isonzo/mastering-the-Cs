@@ -9,11 +9,11 @@ void cursesSetup(void)
 
 void gameLoop(void)
 {
-    int ch = '.';
+    int ch;
 
     drawEverything();
 
-    while (ch == getch())
+    while (ch = getch())
     {
         if (ch == 'q')
         {
