@@ -17,7 +17,7 @@ bool cursesSetup(void)
     }
     else
     {
-        mvprintw(20, 50, "Your system doesn't support colors, come back when you have top of the line tech (or a different terminal).")
+        mvprintw(20, 50, "Your system doesn't support colors, come back when you have top of the line tech (or a different terminal).");
         getch();
         return false;
     }
