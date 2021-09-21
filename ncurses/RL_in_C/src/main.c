@@ -9,20 +9,25 @@ Tile** map;
 int main(void)
 {
     Position start_pos;
+    bool compatibleTerminal = cursesSetup();
 
-    cursesSetup();
-    srand(time(NULL));
+    if (compatibleTerminal)
+    {
+        srand(time(NULL));
 
-    map = createMapTiles();
-    start_pos = setupMap();
-    player = createPlayer(start_pos);
+        map = createMapTiles();
+        start_pos = setupMap();
+        player = createPlayer(start_pos);
 
-    player = createPlayer(start_pos);
-    mvaddch(player->pos.y, player->pos.x, player->ch);
+        player = createPlayer(start_pos);
+        mvaddch(player->pos.y, player->pos.x, player->ch);
 
-    gameLoop();
+        gameLoop();
 
-    closeGame();
+        closeGame();
+    }
+    else
+        endwin();
 
     return 0;
 }
