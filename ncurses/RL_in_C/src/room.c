@@ -32,17 +32,20 @@ void connectRoomCenters(Position centerOne, Position centerTwo)
     temp.x = centerOne.x;
     temp.y = centerOne.y;
 
-    while (temp.x != centerTwo.x && temp.y != centerTwo.y)
+    while (true)
     {
         if (abs((temp.x - 1) - centerTwo.x) < abs(temp.x - centerTwo.x))
-            --temp.x;
-        else if (abs(temp.x + 1) - centerTwo.x < abs(temp.x - centerTwo.x))
-            ++temp.x;
-        else if (abs(temp.y + 1) - centerTwo.y < abs(temp.x - centerTwo.y))
-            ++temp.y;
-        else if (abs(temp.y - 1) - centerTwo.y < abs(temp.x - centerTwo.y))
-            --temp.y;
-    map[temp.y][temp.x].ch = '.';
-    map[temp.y][temp.x].walkable = true;
+            temp.x--;
+        else if (abs((temp.x + 1) - centerTwo.x) < abs(temp.x - centerTwo.x))
+            temp.x++;
+        else if (abs((temp.y + 1) - centerTwo.y) < abs(temp.x - centerTwo.y))
+            temp.y++;
+        else if (abs((temp.y - 1) - centerTwo.y) < abs(temp.x - centerTwo.y))
+            temp.y--;
+        else 
+            break;
+
+        map[temp.y][temp.x].ch = '.';
+        map[temp.y][temp.x].walkable = true;
     }
 }
