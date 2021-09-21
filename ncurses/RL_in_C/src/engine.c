@@ -13,7 +13,7 @@ void gameLoop(void)
 
     drawEverything();
 
-    while (ch = getch())
+    while ((ch = getch()))
     {
         if (ch == 'q')
         {
