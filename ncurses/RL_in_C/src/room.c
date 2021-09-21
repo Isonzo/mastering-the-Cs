@@ -25,3 +25,24 @@ void addRoomToMap(Room room)
         }
     }
 }
+
+void connectRoomCenters(Position centerOne, Position centerTwo)
+{
+    Position temp;
+    temp.x = centerOne.x;
+    temp.y = centerOne.y;
+
+    while (temp.x != centerTwo.x && temp.y != centerTwo.y)
+    {
+        if (abs((temp.x - 1) - centerTwo.x) < abs(temp.x - centerTwo.x))
+            --temp.x;
+        else if (abs(temp.x + 1) - centerTwo.x < abs(temp.x - centerTwo.x))
+            ++temp.x;
+        else if (abs(temp.y + 1) - centerTwo.y < abs(temp.x - centerTwo.y))
+            ++temp.y;
+        else if (abs(temp.y - 1) - centerTwo.y < abs(temp.x - centerTwo.y))
+            --temp.y;
+    map[temp.y][temp.x].ch = '.';
+    map[temp.y][temp.x].walkable = true;
+    }
+}
