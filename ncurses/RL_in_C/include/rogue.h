@@ -1,7 +1,7 @@
 #ifndef ROGUE_H
 #define ROGUE_H
 
-#ifdef _LINUX
+#ifdef __linux__
 #include <ncurses.h>
 #elif _WIN32
 #include <curses.h>
