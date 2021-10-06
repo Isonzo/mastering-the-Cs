@@ -11,12 +11,13 @@ void Test_Function(Node* node)
 
 int main()
 {
-	List* list1 = List_Alloc();
-	List* leaky_list = List_Alloc();
-	List_PushBack(leaky_list, 1);
+	List* list = List_Alloc();
+	int array[5] = {1, 4, 2, 3, 6};
+	list = List_FromArray(array, 5);
 
-	List_Move(list1, leaky_list);
-	List_Print(leaky_list);
+	bool count = List_IsEmpty(list);
+	printf("%d\n", count);
+	// List_Print(list);
 	return 0;
 }
 
@@ -41,7 +42,7 @@ void List_PushFront(List* list, int value)
 }
 
 //Counts the number of nodes in the list and returns the value
-unsigned int List_Count(List const* list) // TODO: test function
+unsigned int List_Count(List const* list)
 {
 	if(!list) return 0;
 	Node* current = list->first;
@@ -56,7 +57,7 @@ unsigned int List_Count(List const* list) // TODO: test function
 }
 
 //Adds the data of the nodes in a list
-int List_Sum(List const* list) // TODO: test function
+int List_Sum(List const* list)
 {
 	if (!list) return 0;
 	int sum = 0;
@@ -71,7 +72,7 @@ int List_Sum(List const* list) // TODO: test function
 }
 
 //Checks to see if it is sorted in ascending order
-bool List_IsSorted(List const* list) // TODO: test function
+bool List_IsSorted(List const* list)
 {
 	if (!list) return false; //Is a non-existing list sorted? That's something for the philosophers to answer
 	int previous_num = INT_MIN;
@@ -561,7 +562,7 @@ void List_Blend(List* destination, List const* extra) // TODO: test function
 
 //Same as List_Blend, except the nodes from the extra list should be moved and not copied.
 //The extra list should have no nodes on it afterward.
-void List_Merge(List* destination, List* extra)
+void List_Merge(List* destination, List* extra) // TODO: test function
 {
 	Node* temp_extra = extra->first;
 	while (temp_extra != NULL)
@@ -607,7 +608,7 @@ void List_Merge(List* destination, List* extra)
 //The return value for this should mimic the same pattern as strcmp() from the standard C library.
 //For example, if the lists are identical you should return zero.
 //If either list is null, return INT_MAX.
-int List_Compare(List const* list1, List const* list2)
+int List_Compare(List const* list1, List const* list2) // TODO: test function
 {
 	if (!list1 || !list2) return INT_MAX;
 
@@ -623,7 +624,7 @@ int List_Compare(List const* list1, List const* list2)
 //Remove all nodes from sourceIndexStart to sourceIndexEnd on source,
 //and then insert them in the same order at destIndex on destination.
 //If sourceIndexEnd < sourceIndexStart, insert them in destination in reverse order.
-void List_Splice(List* destination, unsigned int destIndex, List* source, unsigned int sourceIndexStart, unsigned int sourceIndexEnd)
+void List_Splice(List* destination, unsigned int destIndex, List* source, unsigned int sourceIndexStart, unsigned int sourceIndexEnd) // TODO: test function
 {
 	if (!source || !destination) return; // Missing lists is a big no-no
 	if (sourceIndexStart == sourceIndexEnd) return; // If they're the same, slice size is 0, no point in running program.
@@ -632,8 +633,7 @@ void List_Splice(List* destination, unsigned int destIndex, List* source, unsign
 	Node* slice_last;
 	Node* prev = NULL;
 	Node* post = NULL;
-	bool track_prev;
-	int count = 0;
+	unsigned int count = 0;
 
 	// Acquire donation from source, treat patient slightly different depending if reversed or not.
 	if (sourceIndexStart < sourceIndexEnd)
@@ -780,7 +780,7 @@ void List_Splice(List* destination, unsigned int destIndex, List* source, unsign
 //Takes a pointer to a function that takes a Node const* as an argument, and returns true(nonzero) or false(zero).
 //This function will then remove all nodes from the given list where the predicate returned false.
 //It should return the number of nodes that were removed.
-unsigned int List_RemoveIf(List* list, int(*predicate)(Node const*))
+unsigned int List_RemoveIf(List* list, int(*predicate)(Node const*)) // TODO: test function
 {
 	if (!list) return 0;
 	int removed_nodes = 0;
