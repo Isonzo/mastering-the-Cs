@@ -15,9 +15,7 @@ int main()
 	int array[5] = {1, 4, 2, 3, 6};
 	list = List_FromArray(array, 5);
 
-	bool count = List_IsEmpty(list);
-	printf("%d\n", count);
-	// List_Print(list);
+	List_Print(list);
 	return 0;
 }
 
@@ -90,9 +88,9 @@ bool List_IsSorted(List const* list)
 	return true;
 }
 //Checks if list is empty
-bool List_IsEmpty(List const* list) // TODO: test function
+bool List_IsEmpty(List const* list)
 {
-	if(!list) return true; //Is a non-existent list empty? I refer back to the conundrum of the sorted list
+	if(!list) return false; //Is a non-existent list empty? I refer back to the conundrum of the sorted list
 	if (!(list->first)) return true; //if the first element is invalid, either something's wrong or the list is simply empty
 	else return false;
 }
@@ -122,47 +120,48 @@ void List_PushBack(List* list, int value)
 	}
 }
 
+//Adds a node at the end of the list
+bool List_PushBackBool(List* list, int value)
+{
+	if(!list) return false;
+	Node* new_node;
+	Node* temp;
+
+	new_node = malloc(sizeof(Node));
+	if(!new_node) return false;  //If malloc fails, don't try to add the node
+	new_node->data = value;
+
+	if (List_IsEmpty(list)) //If list is empty, assign first and last pointers
+	{
+		list->first = new_node;
+		list->last = new_node;
+		new_node->next = NULL;
+	}
+	else
+	{
+		temp = list->last;
+		temp->next = new_node;
+		list->last = new_node;
+	}
+	return true;
+}
+
 //It turns the array into a linked list. In goes array, out goes linked list.
-List* List_FromArray(int const* array, unsigned int arrayLength) // TODO: test function
+List* List_FromArray(int const* array, unsigned int arrayLength)
 {
 	List* list = List_Alloc();
-	Node* temp;
-	Node* previous;
-	for(unsigned int i = 0; i <= arrayLength; ++i)
+	unsigned int count = 0;
+
+	while (count < arrayLength)
 	{
-		// This avoids an unneccesary malloc at the end
-		if(i < arrayLength)
+		printf("%d", count);
+		if (!List_PushBackBool(list, *(array + count))) // Modified Pushback that returns whether it was successful or not (handy!)
 		{
-			temp = malloc(sizeof(Node));
-			if(!temp)
-			{
-				List_Free(&list); // No memory leak if we fail to initialize
-				return NULL;
-			}
-			temp->data = *(array + i);
+			List_Free(&list);
+			return NULL;
 		}
-
-		if(i == 0)
-		{
-			list->first = temp;
-			previous = temp;
-		}
-		else if(i == arrayLength)
-		{
-			list->last = temp;
-			previous->next = NULL;
-			previous = temp;
-		}
-		else
-		{
-			previous->next = temp;
-			previous = temp;
-		}
-
-
+		++count;
 	}
-	// Check if linked list is the same length. If it isn't, proccess has failed
-	if (List_Count(list) != arrayLength) return NULL;
 	return list;
 }
 
