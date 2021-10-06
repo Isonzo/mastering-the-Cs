@@ -14,6 +14,7 @@ int main()
 	List* list = List_Alloc();
 	int array[5] = {1, 4, 2, 3, 6};
 	list = List_FromArray(array, 5);
+	List_Insert(list, 7, 0);
 
 	List_Print(list);
 	return 0;
@@ -154,7 +155,6 @@ List* List_FromArray(int const* array, unsigned int arrayLength)
 
 	while (count < arrayLength)
 	{
-		printf("%d", count);
 		if (!List_PushBackBool(list, *(array + count))) // Modified Pushback that returns whether it was successful or not (handy!)
 		{
 			List_Free(&list);
@@ -168,12 +168,14 @@ List* List_FromArray(int const* array, unsigned int arrayLength)
 //Insert value at a certain index, assuming linked list is 0-indexed and has at least one value
 void List_Insert(List* list, int value, unsigned int index) // TODO: test function
 {
+	if (!list) return;
+	unsigned int list_count = List_Count(list);
 	Node* new_node = malloc(sizeof(Node));
 	if (!new_node) return;
 	new_node->data = value;
 
 	// If the index is bigger than the list, abort
-	if (index > List_Count(list))
+	if (index > list_count)
 		return;
 
 	// If the node is at the beginning or end, let's just save ourselves the hassle
@@ -183,7 +185,7 @@ void List_Insert(List* list, int value, unsigned int index) // TODO: test functi
 		list->first = new_node;
 		return;
 	}
-	else if(index == List_Count(list))
+	else if(index == list_count)
 	{
 		list->last->next = new_node;
 		new_node->next = NULL;
@@ -191,12 +193,14 @@ void List_Insert(List* list, int value, unsigned int index) // TODO: test functi
 		return;
 	}
 	// Since it's not the first or last, we make some variables to help us keep track and iterate through the list to insert
-	Node* previous;
-	Node* temp = list->first;
-	for (unsigned int count = 0; count < index; ++count)
+	Node* previous = list->first;
+	Node* temp = previous->next;
+	unsigned int count = 1; // starts at 1 since we already know it's not 0
+	while (temp != NULL && count != index)
 	{
 		previous = temp;
 		temp = temp->next;
+		++count;
 	}
 	previous->next = new_node;
 	new_node->next = temp;
