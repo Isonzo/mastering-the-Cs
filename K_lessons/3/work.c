@@ -16,6 +16,7 @@ int main()
 	List_PushBack(leaky_list, 1);
 
 	List_Move(list1, leaky_list);
+	List_Print(leaky_list);
 	return 0;
 }
 
@@ -40,7 +41,7 @@ void List_PushFront(List* list, int value)
 }
 
 //Counts the number of nodes in the list and returns the value
-unsigned int List_Count(List const* list)
+unsigned int List_Count(List const* list) // TODO: test function
 {
 	if(!list) return 0;
 	Node* current = list->first;
@@ -55,7 +56,7 @@ unsigned int List_Count(List const* list)
 }
 
 //Adds the data of the nodes in a list
-int List_Sum(List const* list)
+int List_Sum(List const* list) // TODO: test function
 {
 	if (!list) return 0;
 	int sum = 0;
@@ -70,7 +71,7 @@ int List_Sum(List const* list)
 }
 
 //Checks to see if it is sorted in ascending order
-bool List_IsSorted(List const* list)
+bool List_IsSorted(List const* list) // TODO: test function
 {
 	if (!list) return false; //Is a non-existing list sorted? That's something for the philosophers to answer
 	int previous_num = INT_MIN;
@@ -88,7 +89,7 @@ bool List_IsSorted(List const* list)
 	return true;
 }
 //Checks if list is empty
-bool List_IsEmpty(List const* list)
+bool List_IsEmpty(List const* list) // TODO: test function
 {
 	if(!list) return true; //Is a non-existent list empty? I refer back to the conundrum of the sorted list
 	if (!(list->first)) return true; //if the first element is invalid, either something's wrong or the list is simply empty
@@ -121,12 +122,12 @@ void List_PushBack(List* list, int value)
 }
 
 //It turns the array into a linked list. In goes array, out goes linked list.
-List* List_FromArray(int const* array, unsigned int arrayLength)
+List* List_FromArray(int const* array, unsigned int arrayLength) // TODO: test function
 {
 	List* list = List_Alloc();
 	Node* temp;
 	Node* previous;
-	for(int i = 0; i <= arrayLength; ++i)
+	for(unsigned int i = 0; i <= arrayLength; ++i)
 	{
 		// This avoids an unneccesary malloc at the end
 		if(i < arrayLength)
@@ -134,7 +135,7 @@ List* List_FromArray(int const* array, unsigned int arrayLength)
 			temp = malloc(sizeof(Node));
 			if(!temp)
 			{
-				List_Free(&list);
+				List_Free(&list); // No memory leak if we fail to initialize
 				return NULL;
 			}
 			temp->data = *(array + i);
@@ -165,7 +166,7 @@ List* List_FromArray(int const* array, unsigned int arrayLength)
 }
 
 //Insert value at a certain index, assuming linked list is 0-indexed and has at least one value
-void List_Insert(List* list, int value, unsigned int index)
+void List_Insert(List* list, int value, unsigned int index) // TODO: test function
 {
 	Node* new_node = malloc(sizeof(Node));
 	if (!new_node) return;
@@ -192,7 +193,7 @@ void List_Insert(List* list, int value, unsigned int index)
 	// Since it's not the first or last, we make some variables to help us keep track and iterate through the list to insert
 	Node* previous;
 	Node* temp = list->first;
-	for (int count = 0; count < index; ++count)
+	for (unsigned int count = 0; count < index; ++count)
 	{
 		previous = temp;
 		temp = temp->next;
@@ -204,7 +205,7 @@ void List_Insert(List* list, int value, unsigned int index)
 
 //Insert a new item into the list. Assume the list is already sorted.
 //Obviously, it should remain sorted after the insertion.
-void List_SortedInsert(List* list, int value)
+void List_SortedInsert(List* list, int value) // TODO: test function
 {
 	// Check if it should be first
 	if (list->first->data >= value)
@@ -239,7 +240,7 @@ void List_SortedInsert(List* list, int value)
 }
 
 //Returns true if the list has no duplicate elements (i.e. all elements are unique).
-bool List_IsUnique(List const* list)
+bool List_IsUnique(List const* list) // TODO: test function
 {
 	if (!list)
 		return true;  // If it has no elements, they can't be duplicate, right?
@@ -262,7 +263,7 @@ bool List_IsUnique(List const* list)
 }
 
 //Remove the first node in the list that has the specified value. If such a node does not exist, do nothing.
-void List_Remove(List* list, int value)
+void List_Remove(List* list, int value) // TODO: test function
 {
 	if (!list) return;
 	Node* temp = list->first;
@@ -296,7 +297,7 @@ void List_Remove(List* list, int value)
 }
 
 //Free the list and its contents from memory, then set the pointer to it to NULL.
-void List_Free(List** list)
+void List_Free(List** list) // TODO: test function
 {
 	if (!list) return;
 	Node* node_to_die;
@@ -313,7 +314,7 @@ void List_Free(List** list)
 }
 
 //Reverse the order of nodes in the list
-void List_Reverse(List* list)
+void List_Reverse(List* list) // TODO: test function
 {
 	if (!list) return;
 	Node* prev = NULL;
@@ -332,11 +333,10 @@ void List_Reverse(List* list)
 }
 
 //Create a new list with the same contents in the same order as the input list and return it. Returns NULL if fails.
-List* List_Copy(List* list)
+List* List_Copy(List* list) // TODO: test function
 {
 	if (!list) return NULL;
 	List* new_list;
-	List** ptr_to_new;
 	new_list = List_Alloc();
 	if (!new_list) return NULL;
 	Node* temp = list->first;
@@ -348,7 +348,7 @@ List* List_Copy(List* list)
 		temp = temp->next;
 		if (prev_last == list->last)
 		{
-			List_Free(ptr_to_new);
+			List_Free(&new_list);
 			return NULL;
 		}
 	}
@@ -363,7 +363,7 @@ List* List_Copy(List* list)
 
 ////Pointer practice
 //Swap the position of the nodes located at the two indices in the given list.
-void List_SwapNodes(List* list, unsigned int firstIndex, unsigned int secondIndex)
+void List_SwapNodes(List* list, unsigned int firstIndex, unsigned int secondIndex) // TODO: test function
 {
 	if (!list) return;
 	if (firstIndex == secondIndex) return;
@@ -371,7 +371,7 @@ void List_SwapNodes(List* list, unsigned int firstIndex, unsigned int secondInde
 	Node* temp = list->first;
 	Node* first;
 	Node* second;
-	int count = 0;
+	unsigned int count = 0;
 	while (temp != NULL || (first == NULL && second == NULL))
 	{
 		if (count == firstIndex)
@@ -386,58 +386,11 @@ void List_SwapNodes(List* list, unsigned int firstIndex, unsigned int secondInde
 	first->data = second->data;
 	second->data = temp_data;
 	return;
-	// Node* first_node = NULL;
-	// Node* second_node = NULL;
-	// Node* prev_first = NULL;
-	// Node* prev_second = NULL;
-	// Node* future_first = NULL;
-	// Node* future_second = NULL;
-	// Node* temp = list->first;
-	// int count = 0;
-	//
-	// if (firstIndex == secondIndex) return;
-	// if (firstIndex >= List_Count(list) || secondIndex >= List_Count(list)) return;
-	//
-	// // Get first_node and second_node, as well as surrounding nodes.
-	// while (temp != NULL || (first_node == NULL) && (second_node == NULL))
-	// {
-	// 	if (count == firstIndex - 1)
-	// 	{
-	// 		future_first = temp->next->next;
-	// 		first_node = temp->next;
-	// 		prev_first = temp;
-	// 	}
-	// 	else if (count == secondIndex - 1)
-	// 	{
-	// 		future_second = temp->next->next;
-	// 		second_node = temp->next;
-	// 		prev_second = temp;
-	// 	}
-	//
-	// 	temp = temp->next;
-	// 	++count;
-	// }
-	// // Time for the switcheroo
-	// prev_first->next = second_node;
-	// second_node->next = future_first;
-	// prev_second->next = first_node;
-	// first_node->next = future_second;
-	//
-	// // Fix up first and last pointers, assuming something happened to them
-	// if (first_node == list->last)
-	// 	list->last = second_node;
-	// else if (first_node == list->first)
-	// 	list->first = second_node;
-	// else if (second_node == list->last)
-	// 	list->last = first_node;
-	// else if (second_node == list->first)
-	// 	list->first = first_node;
-	// return;
 }
 
 ////C++ practice
 //Run the specified function for every node in the list.
-void List_ForEach(List const* list, void(*fn)(Node const*))
+void List_ForEach(List const* list, void(*fn)(Node const*)) // TODO: test function
 {
 	if (!list) return;
 	Node* temp = list->first;
@@ -452,7 +405,7 @@ void List_ForEach(List const* list, void(*fn)(Node const*))
 ////C++ practice
 //Same as above but non-const. Do NOT try to reuse code between these two functions.
 // Using the same code works in my test case ;_;
-void List_Transform(List* list, void(*fn)(Node*))
+void List_Transform(List* list, void(*fn)(Node*)) // TODO: test function
 {
 	if (!list) return;
 	Node* temp = list->first;
@@ -466,7 +419,7 @@ void List_Transform(List* list, void(*fn)(Node*))
 
 ////C++ practice
 //Replace the contents of list1 with the contents of list2, and vice versa.
-void List_Swap(List* list1, List* list2)
+void List_Swap(List* list1, List* list2) // TODO: test function
 {
 	if (!list1 || !list2) return;
 	Node* temp_first = list1->first;
@@ -484,7 +437,7 @@ void List_Swap(List* list1, List* list2)
 //The fate of oldList is irrelevant. You may leave it in a garbage state if you wish.
 ////Hint: There's a very bad and slow way to do this, and a very nice and fast way.
 ////Hint 2: Don't forget the user might surprise you with their inputs...
-void List_Move(List* oldList, List* newList)
+void List_Move(List* oldList, List* newList) // TODO: test function + leakylist
 {
 	if (!oldList || !newList) return;
 	if (oldList == newList) return;
@@ -494,7 +447,7 @@ void List_Move(List* oldList, List* newList)
 
 ////Pointer and general data structure practice
 //Remove all duplicate items in the list, if any. Leave the first occurrence in the list.
-void List_RemoveDuplicates(List* list)
+void List_RemoveDuplicates(List* list) // TODO: test function
 {
 	if (!list) return;
 	// Initialize an array
@@ -535,12 +488,11 @@ void List_RemoveDuplicates(List* list)
 ////I'm not concerned with the efficiency of the sort itself, but I do care about the efficiency that nodes are moved with.
 ////I recommend implementing a selection sort for this.
 ////DO NOT try to use your List_SwapNodes function!!
-void List_Sort(List* list)
+void List_Sort(List* list) // TODO: test function
 {
 	if (!list) return;
 	Node* starting_point = list->first;
 	Node* min_node;
-	int list_count = List_Count(list);
 
 	while (starting_point != NULL)
 	{
@@ -567,7 +519,7 @@ void List_Sort(List* list)
 //Copy all the nodes from the "extra" list to the destination list.
 //You may assume the destination list is already sorted.
 //The destination list should remain sorted afterwards.
-void List_Blend(List* destination, List const* extra)
+void List_Blend(List* destination, List const* extra) // TODO: test function
 {
 	Node* temp_extra = extra->first;
 	while (temp_extra != NULL)
@@ -609,14 +561,59 @@ void List_Blend(List* destination, List const* extra)
 
 //Same as List_Blend, except the nodes from the extra list should be moved and not copied.
 //The extra list should have no nodes on it afterward.
-void List_Merge(List* destination, List* extra);
+void List_Merge(List* destination, List* extra)
+{
+	Node* temp_extra = extra->first;
+	while (temp_extra != NULL)
+	{
+		Node* temp = destination->first->next;
+		Node* prev = destination->first;
+		// This is to save time if the node is lower than the minimum or greater than the maximum.
+		if (temp_extra->data <= destination->first->data)
+		{
+			temp = temp_extra;
+			temp_extra = temp_extra->next;
+			temp->next = destination->first;
+			destination->first = temp;
+			continue;
+		}
+		else if (temp_extra->data >= destination->last->data)
+		{
+			destination->last->next = temp_extra;
+			destination->last = temp_extra;
+			temp_extra = temp_extra->next;
+			continue;
+		}
+		while (temp != NULL)
+		{
+			if (temp->data >= temp_extra->data)
+			{
+				Node* extra_copy = temp_extra;
+				temp_extra = temp_extra->next;
+				prev->next = extra_copy;
+				extra_copy->next = temp;
+			}
+			prev = temp;
+			temp = temp->next;
+		}
+	}
+	extra->first = NULL;
+	extra->last = NULL;
+	return;
+}
 
 ////C++ practice
 //Return the difference between the two lists.
 //The return value for this should mimic the same pattern as strcmp() from the standard C library.
 //For example, if the lists are identical you should return zero.
 //If either list is null, return INT_MAX.
-int List_Compare(List const* list1, List const* list2);
+int List_Compare(List const* list1, List const* list2)
+{
+	if (!list1 || !list2) return INT_MAX;
+
+	int result = List_Sum(list1) - List_Sum(list2);
+	return result;
+}
 
 
 ////These two are probably the hardest functions in this exercise. I think that they'd be standard material for a second-year CS student at a decent uni. Have fun!
@@ -626,10 +623,193 @@ int List_Compare(List const* list1, List const* list2);
 //Remove all nodes from sourceIndexStart to sourceIndexEnd on source,
 //and then insert them in the same order at destIndex on destination.
 //If sourceIndexEnd < sourceIndexStart, insert them in destination in reverse order.
-void List_Splice(List* destination, unsigned int destIndex, List* source, unsigned int sourceIndexStart, unsigned int sourceIndexEnd);
+void List_Splice(List* destination, unsigned int destIndex, List* source, unsigned int sourceIndexStart, unsigned int sourceIndexEnd)
+{
+	if (!source || !destination) return; // Missing lists is a big no-no
+	if (sourceIndexStart == sourceIndexEnd) return; // If they're the same, slice size is 0, no point in running program.
+	Node* temp = source->first;
+	Node* slice_first;
+	Node* slice_last;
+	Node* prev = NULL;
+	Node* post = NULL;
+	bool track_prev;
+	int count = 0;
+
+	// Acquire donation from source, treat patient slightly different depending if reversed or not.
+	if (sourceIndexStart < sourceIndexEnd)
+	{
+		while (temp != NULL)
+		{
+			if (count == sourceIndexStart - 1)
+			{
+				prev = temp;
+				slice_first = temp->next;
+				if (sourceIndexEnd >= List_Count(source) - 1) // Don't want users to accidentally overshoot it.
+				{
+					slice_last = source->last;
+					break;
+				}
+			}
+			else if (count == sourceIndexEnd)
+			{
+				slice_last = temp;
+				post = temp->next;
+				break;
+			}
+			temp = temp->next;
+			count += 1;
+		}
+	}
+	else
+	{
+		while (temp != NULL)
+		{
+			if (count == sourceIndexEnd - 1)
+			{
+				prev = temp;
+				slice_first = temp->next;
+				if (sourceIndexStart >= List_Count(source) - 1) // Same generosity as before.
+				{
+					slice_last = source->last;
+					break;
+				}
+			}
+			else if (count == sourceIndexStart)
+			{
+				slice_last = temp;
+				post = temp->next;
+				break;
+			}
+			temp = temp->next;
+			count += 1;
+		}
+	}
+	// Fix up source post-op, this makes sure pointers are in the correct place.
+	if (prev)
+		prev->next = post;
+	else if (post)
+		source->first = post;
+	else
+	{
+		source->first = NULL;
+		source->last = NULL;
+	}
+
+	// Do the transplant, but without using List_Insert (We have pointers!).
+	temp = destination->first;
+	count = 0;
+	if (sourceIndexStart < sourceIndexEnd)
+	{
+		if (destIndex == 0)
+		{
+			destination->first = slice_first;
+			slice_last->next = temp;
+		}
+		else if (destIndex >= List_Count(destination)) // Give a bit of lee-way, if it's above the maximum, put it at the end.
+		{
+			destination->last->next = slice_first;
+			slice_last->next = NULL;
+			destination->last = slice_last;
+		}
+		else
+		{
+			while (temp != NULL)
+			{
+				if (count == destIndex - 1) // Engaging insertion, temp is currently at node prev to slice.
+				{
+					Node* suture = temp->next;
+					temp->next = slice_first;
+					slice_last->next = suture; // And with this, the open wound we made is sealed.
+					break;
+				}
+				count += 1;
+				temp = temp->next;
+			}
+		}
+	}
+	else // Non-conforming splice, time to fix it up!
+	{
+		// Reverse Splice
+		Node* before = NULL;
+		Node* current = slice_first;
+		Node* after = NULL;
+		slice_last->next = NULL;
+
+		while (current != NULL)
+		{
+			after = current->next;
+			current->next = before;
+			before = current;
+			current = after;
+		}
+		temp = slice_last;
+		slice_last = slice_first;
+		slice_first = temp;
+		temp = destination->first;
+		if (destIndex == 0)
+		{
+			destination->first = slice_first;
+			slice_last->next = temp;
+		}
+		else if (destIndex >= List_Count(destination)) // Give a bit of lee-way, if it's above the maximum, put it at the end.
+		{
+			destination->last->next = slice_first;
+			slice_last->next = NULL;
+			destination->last = slice_last;
+		}
+		else
+		{
+			while (temp != NULL)
+			{
+				if (count == destIndex - 1) // Engaging insertion, temp is currently at node prev to slice.
+				{
+					Node* suture = temp->next;
+					temp->next = slice_first;
+					slice_last->next = suture; // And with this, the open wound we made is sealed.
+					break;
+				}
+				count += 1;
+				temp = temp->next;
+			}
+		}
+	}
+	return;
+}
 
 ////C++ and pointer practice
 //Takes a pointer to a function that takes a Node const* as an argument, and returns true(nonzero) or false(zero).
 //This function will then remove all nodes from the given list where the predicate returned false.
 //It should return the number of nodes that were removed.
-unsigned int List_RemoveIf(List* list, int(*predicate)(Node const*));
+unsigned int List_RemoveIf(List* list, int(*predicate)(Node const*))
+{
+	if (!list) return 0;
+	int removed_nodes = 0;
+	Node* temp = list->first;
+	Node* prev = NULL;
+
+	while (temp != NULL)
+	{
+		if (predicate(temp))
+		{
+			if (prev == NULL)
+			{
+				list->first = temp->next;
+				free(temp);
+				temp = list->first;
+				++removed_nodes;
+				continue;
+			}
+			else
+			{
+				prev->next = temp->next;
+				free(temp);
+				temp = prev->next;
+				++removed_nodes;
+				continue;
+			}
+		}
+		prev = temp;
+		temp = temp->next;
+	}
+	return removed_nodes;
+}
