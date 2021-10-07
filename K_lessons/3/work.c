@@ -12,9 +12,9 @@ void Test_Function(Node* node)
 int main()
 {
 	List* list = List_Alloc();
-	int array[5] = {1, 4, 2, 3, 6};
+	int array[5] = {1, 2, 3, 4, 6};
 	list = List_FromArray(array, 5);
-	List_Insert(list, 7, 0);
+	List_SortedInsert(list, 5);
 
 	List_Print(list);
 	return 0;
@@ -166,7 +166,7 @@ List* List_FromArray(int const* array, unsigned int arrayLength)
 }
 
 //Insert value at a certain index, assuming linked list is 0-indexed and has at least one value
-void List_Insert(List* list, int value, unsigned int index) // TODO: test function
+void List_Insert(List* list, int value, unsigned int index)
 {
 	if (!list) return;
 	unsigned int list_count = List_Count(list);
@@ -209,7 +209,7 @@ void List_Insert(List* list, int value, unsigned int index) // TODO: test functi
 
 //Insert a new item into the list. Assume the list is already sorted.
 //Obviously, it should remain sorted after the insertion.
-void List_SortedInsert(List* list, int value) // TODO: test function
+void List_SortedInsert(List* list, int value)
 {
 	// Check if it should be first
 	if (list->first->data >= value)
@@ -223,11 +223,12 @@ void List_SortedInsert(List* list, int value) // TODO: test function
 		List_PushBack(list, value);
 		return;
 	}
-	Node* temp = list->first;
-	Node* prev = temp;
+	Node* prev = list->first;
+	Node* temp = prev->next;
 	Node* new_node;
+	//unsigned int count = 1;
 	new_node = malloc(sizeof(Node));
-	if (new_node) return;
+	if (!new_node) return;
 	new_node->data = value;
 	while (temp != NULL)
 	{
