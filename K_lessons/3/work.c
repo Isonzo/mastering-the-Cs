@@ -14,7 +14,7 @@ int main()
 	List* list = List_Alloc();
 	int array[5] = {1, 2, 3, 4, 6};
 	list = List_FromArray(array, 5);
-	List_SortedInsert(list, 5);
+	list = List_Copy(list);
 
 	List_Print(list);
 	return 0;
@@ -245,10 +245,9 @@ void List_SortedInsert(List* list, int value)
 }
 
 //Returns true if the list has no duplicate elements (i.e. all elements are unique).
-bool List_IsUnique(List const* list) // TODO: test function
+bool List_IsUnique(List const* list)
 {
-	if (!list)
-		return true;  // If it has no elements, they can't be duplicate, right?
+	if (!list) return true;  // If it has no elements, they can't be duplicate, right?
 	int list_count = List_Count(list);
 	int* values_present = malloc(list_count * sizeof(int));
 	Node* temp = list->first;
@@ -263,14 +262,16 @@ bool List_IsUnique(List const* list) // TODO: test function
 				return false;
 		}
 		temp = temp->next;
+		++count;
 	}
 	return true;
 }
 
 //Remove the first node in the list that has the specified value. If such a node does not exist, do nothing.
-void List_Remove(List* list, int value) // TODO: test function
+void List_Remove(List* list, int value)
 {
 	if (!list) return;
+	if (List_IsEmpty(list)) return;
 	Node* temp = list->first;
 	Node* prev;
 	if (list->first->data == value)
@@ -302,7 +303,7 @@ void List_Remove(List* list, int value) // TODO: test function
 }
 
 //Free the list and its contents from memory, then set the pointer to it to NULL.
-void List_Free(List** list) // TODO: test function
+void List_Free(List** list)
 {
 	if (!list) return;
 	Node* node_to_die;
@@ -319,7 +320,7 @@ void List_Free(List** list) // TODO: test function
 }
 
 //Reverse the order of nodes in the list
-void List_Reverse(List* list) // TODO: test function
+void List_Reverse(List* list)
 {
 	if (!list) return;
 	Node* prev = NULL;
@@ -338,7 +339,7 @@ void List_Reverse(List* list) // TODO: test function
 }
 
 //Create a new list with the same contents in the same order as the input list and return it. Returns NULL if fails.
-List* List_Copy(List* list) // TODO: test function
+List* List_Copy(List* list)
 {
 	if (!list) return NULL;
 	List* new_list;
