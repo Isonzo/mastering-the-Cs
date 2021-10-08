@@ -12,9 +12,14 @@ void Test_Function(Node* node)
 int main()
 {
 	List* list = List_Alloc();
-	int array[5] = {1, 2, 3, 4, 6};
-	list = List_FromArray(array, 5);
-	List_SwapNodes(list, 2, 4);
+	List* list2 = List_Alloc();
+	bool empty = List_IsEmpty(list);
+	// int array[5] = {1, 2, 3, 4, 6};
+	// list = List_FromArray(array, 5);
+	int array2[5] = {2, 6, 5, 7, -1};
+	list2 = List_FromArray(array2, 5);
+	List_Blend(list, list2);
+	printf("%d\n", empty);
 
 	List_Print(list);
 	return 0;
@@ -339,7 +344,7 @@ void List_Reverse(List* list)
 }
 
 //Create a new list with the same contents in the same order as the input list and return it. Returns NULL if fails.
-List* List_Copy(List* list)
+List* List_Copy(const List* list)
 {
 	if (!list) return NULL;
 	List* new_list;
@@ -396,7 +401,7 @@ void List_SwapNodes(List* list, unsigned int firstIndex, unsigned int secondInde
 
 ////C++ practice
 //Run the specified function for every node in the list.
-void List_ForEach(List const* list, void(*fn)(Node const*)) // TODO: test function
+void List_ForEach(List const* list, void(*fn)(Node const*))
 {
 	if (!list) return;
 	Node* temp = list->first;
@@ -411,7 +416,7 @@ void List_ForEach(List const* list, void(*fn)(Node const*)) // TODO: test functi
 ////C++ practice
 //Same as above but non-const. Do NOT try to reuse code between these two functions.
 // Using the same code works in my test case ;_;
-void List_Transform(List* list, void(*fn)(Node*)) // TODO: test function
+void List_Transform(List* list, void(*fn)(Node*))
 {
 	if (!list) return;
 	Node* temp = list->first;
@@ -425,7 +430,7 @@ void List_Transform(List* list, void(*fn)(Node*)) // TODO: test function
 
 ////C++ practice
 //Replace the contents of list1 with the contents of list2, and vice versa.
-void List_Swap(List* list1, List* list2) // TODO: test function
+void List_Swap(List* list1, List* list2)
 {
 	if (!list1 || !list2) return;
 	Node* temp_first = list1->first;
@@ -443,10 +448,23 @@ void List_Swap(List* list1, List* list2) // TODO: test function
 //The fate of oldList is irrelevant. You may leave it in a garbage state if you wish.
 ////Hint: There's a very bad and slow way to do this, and a very nice and fast way.
 ////Hint 2: Don't forget the user might surprise you with their inputs...
-void List_Move(List* oldList, List* newList) // TODO: test function + leakylist
+void List_Move(List* oldList, List* newList)
 {
 	if (!oldList || !newList) return;
 	if (oldList == newList) return;
+	if (List_IsEmpty(oldList) && !(List_IsEmpty(newList)))
+	{
+		Node* node_to_die;
+		Node* temp = newList->first;
+		while (temp != NULL)
+		{
+			node_to_die = temp;
+			temp = temp->next;
+			free(node_to_die);
+		}
+		List_Free(&oldList);
+		return;
+	}
 	List_Swap(oldList, newList);
 	List_Free(&oldList);
 }
@@ -494,7 +512,7 @@ void List_RemoveDuplicates(List* list) // TODO: test function
 ////I'm not concerned with the efficiency of the sort itself, but I do care about the efficiency that nodes are moved with.
 ////I recommend implementing a selection sort for this.
 ////DO NOT try to use your List_SwapNodes function!!
-void List_Sort(List* list) // TODO: test function
+void List_Sort(List* list)
 {
 	if (!list) return;
 	Node* starting_point = list->first;
@@ -527,6 +545,14 @@ void List_Sort(List* list) // TODO: test function
 //The destination list should remain sorted afterwards.
 void List_Blend(List* destination, List const* extra) // TODO: test function
 {
+	if (!destination || !extra) return;
+	if (List_IsEmpty(destination)) // If destination is empty, the rest of the code would cause a segmentation fault. 
+	{
+		// Only way to make sure destination is sorted.
+		destination = List_Copy(extra);
+		List_Sort(destination);
+		return;
+	}
 	Node* temp_extra = extra->first;
 	while (temp_extra != NULL)
 	{

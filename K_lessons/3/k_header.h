@@ -119,7 +119,7 @@ void List_Reverse(List* list);
 //Create a new list with the same contents in the same order as the input list and return it.
 //If this fails for any reason, return NULL.
 //If this fails due to malloc failing, you must also clean up any allocated memory before returning.
-List* List_Copy(List* list);
+List* List_Copy(const List* list);
 
 
 
