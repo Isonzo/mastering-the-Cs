@@ -14,7 +14,7 @@ int main()
 	List* list = List_Alloc();
 	int array[5] = {1, 2, 3, 4, 6};
 	list = List_FromArray(array, 5);
-	list = List_Copy(list);
+	List_SwapNodes(list, 2, 4);
 
 	List_Print(list);
 	return 0;
@@ -369,7 +369,7 @@ List* List_Copy(List* list)
 
 ////Pointer practice
 //Swap the position of the nodes located at the two indices in the given list.
-void List_SwapNodes(List* list, unsigned int firstIndex, unsigned int secondIndex) // TODO: test function
+void List_SwapNodes(List* list, unsigned int firstIndex, unsigned int secondIndex)
 {
 	if (!list) return;
 	if (firstIndex == secondIndex) return;
