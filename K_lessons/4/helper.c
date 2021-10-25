@@ -23,9 +23,15 @@ GLFWwindow* initGLFW()
 char* readContent(const char* location)
 {
     FILE* file = fopen(location, "r");
+    if (file == NULL)
+    {
+        printf("Error: failed to open file");   
+        return 0;
+    }
     char* fcontent = NULL;
     fseek(file, 0, SEEK_END);
     long size = ftell(file);
+    printf("%ld\n", size);
     rewind(file);
 
     fcontent = malloc(size); 

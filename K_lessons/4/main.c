@@ -35,8 +35,8 @@ int main()
     glViewport(0, 0, 800, 600);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     
-    int vertexShader = loadVertexShader("basic_vertex.glsl");
-    int fragmentShader = loadFragmentShader("basic_fragment.glsl");
+    int vertexShader = loadVertexShader("basic_vertex.glvl");
+    int fragmentShader = loadFragmentShader("basic_fragment.glfl");
  
 
     // Link up shaders
