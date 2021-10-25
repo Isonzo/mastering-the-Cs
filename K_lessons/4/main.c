@@ -9,19 +9,6 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 
 
-const char* fragmentShaderSource = "#version 330 core\n"
-    "out vec4 FragColor;\n"
-    "void main()\n"
-    "{\n"
-    "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-    "}\0";
-
-const char* fragmentShaderSource_2 = "#version 330 core\n"
-    "out vec4 FragColor;\n"
-    "void main()\n"
-    "{\n"
-    "   FragColor = vec4(0.0f, 0.5f, 0.7f, 1.0f);\n"
-    "}\0";
 int main()
 {
 
@@ -35,8 +22,9 @@ int main()
     glViewport(0, 0, 800, 600);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     
-    int vertexShader = loadVertexShader("basic_vertex.glvl");
-    int fragmentShader = loadFragmentShader("basic_fragment.glfl");
+    // Load and Compile shaders
+    int vertexShader = loadVertexShader("basic_vertex.glsl");
+    int fragmentShader = loadFragmentShader("basic_fragment.glsl");
  
 
     // Link up shaders
