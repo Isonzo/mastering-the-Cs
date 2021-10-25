@@ -30,15 +30,9 @@ const char* fragmentShaderSource_2 = "#version 330 core\n"
     "}\0";
 int main()
 {
-   
-    
-    initGLFW();
-    GLFWwindow* window;
-    if ((window = createWindow()))
-    {
-        printf("FOILED ONCE AGAIN");
-        return -1;
-    }
+
+    GLFWwindow* window = initGLFW();
+
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         printf("Failed to initialize GLAD :c");
