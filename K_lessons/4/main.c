@@ -1,5 +1,6 @@
-#include "glad.h"
+#include "include/glad.h"
 #include <GLFW/glfw3.h>
+#include "helper.h"
 #include <stdio.h>
 #include <stdbool.h>
 
@@ -31,21 +32,13 @@ int main()
 {
    
     
-
-    glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    GLFWwindow* window = glfwCreateWindow(800, 600, "LearnOpenGL", NULL, NULL);
-    if (window == NULL)
+    initGLFW();
+    GLFWwindow* window;
+    if ((window = createWindow()))
     {
-        printf("Failed to create GLFW window :c");
-        glfwTerminate();
+        printf("FOILED ONCE AGAIN");
         return -1;
     }
-    glfwMakeContextCurrent(window);
-
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         printf("Failed to initialize GLAD :c");
