@@ -71,7 +71,7 @@ const char * StreamReadToken(Stream stream)
     if (!stream) return 0;
     static char tokenBuffer[1000];
     tokenBuffer[0] = 0;
-    fscanf_s(stream, "%s", tokenBuffer, sizeof(tokenBuffer));
+    fscanf(stream, "%s", tokenBuffer);
     
     return tokenBuffer;
 }

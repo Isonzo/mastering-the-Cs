@@ -3,10 +3,10 @@
 int main()
 {
     Stream input;
-    char* output;
+    float output;
     input = StreamOpen("input.txt");
-    output = StreamReadToken(input);
-    printf("%s", output);
+    output = StreamReadFloat(input);
+    printf("%f", output);
     StreamClose(input);
 
     return 0;
